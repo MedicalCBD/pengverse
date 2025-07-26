@@ -19,11 +19,6 @@ penguinLeftImg.src = 'pengleft.png';
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-const CANVAS_WIDTH = 900;
-const CANVAS_HEIGHT = 450;
-canvas.width = CANVAS_WIDTH;
-canvas.height = CANVAS_HEIGHT;
-
 const PENGUIN_SIZE = 64;
 const WALK_FRAME_SIZE = 32;
 const WALK_FRAMES = 4;
@@ -527,7 +522,7 @@ function fadeStep() {
             me.x = 0;
           } else if (nextInstance < previousInstance) {
             // Moving left: appear at right edge
-                      me.x = CANVAS_WIDTH - WALK_FRAME_SIZE;
+                      me.x = canvas.width - WALK_FRAME_SIZE;
         }
         // Notify server of instance change
         socket.emit('changeInstance', {
@@ -583,7 +578,7 @@ function fadeStepSidebar() {
           me.x = 0;
         } else if (nextInstance < previousInstance) {
           // Moving left: appear at right edge
-          me.x = CANVAS_WIDTH - WALK_FRAME_SIZE;
+          me.x = canvas.width - WALK_FRAME_SIZE;
         } else {
           // Same instance (shouldn't happen but just in case)
           me.x = 0;
@@ -639,12 +634,12 @@ window.addEventListener('keydown', e => {
     me.lastDir = 'left';
   } else if (e.key === 'ArrowRight') {
     me.x += speed;
-    if (me.x > CANVAS_WIDTH - PENGUIN_SIZE) {
+    if (me.x > canvas.width - PENGUIN_SIZE) {
       if (currentInstance < 4) { // 5 instances total (0-4)
         // Change to next instance
         startFade(currentInstance + 1);
       } else {
-        me.x = CANVAS_WIDTH - PENGUIN_SIZE;
+        me.x = canvas.width - PENGUIN_SIZE;
       }
     }
     me.walkingRight = true;
@@ -791,6 +786,34 @@ setInterval(() => {
   updateWalkAnim();
   draw();
 }, 100);
+
+function resizeGameCanvas() {
+  // Desktop: fixed size
+  if (window.innerWidth > 900) {
+    canvas.width = 900;
+    canvas.height = 450;
+  } else {
+    // Mobile: fill available space between nickname and chat
+    const nicknameBar = document.getElementById('nickname-container');
+    const chatBar = document.getElementById('chat-bar');
+    const nicknameHeight = nicknameBar ? nicknameBar.offsetHeight : 0;
+    const chatHeight = chatBar ? chatBar.offsetHeight : 0;
+    const availableHeight = window.innerHeight - nicknameHeight - chatHeight - 16; // 16px margin
+    let width = window.innerWidth;
+    let height = Math.floor(width / 2); // 2:1 aspect ratio
+    if (height > availableHeight) {
+      height = availableHeight;
+      width = Math.floor(height * 2);
+      if (width > window.innerWidth) width = window.innerWidth;
+    }
+    canvas.width = width;
+    canvas.height = height;
+  }
+  draw();
+}
+
+window.addEventListener('resize', resizeGameCanvas);
+document.addEventListener('DOMContentLoaded', resizeGameCanvas);
 
 // Attach event listeners after DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
