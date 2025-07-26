@@ -1,7 +1,7 @@
 {
   "name": "pengcity",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "dependencies": {
     "accepts": "^1.3.8",
     "array-flatten": "^1.1.1",
@@ -83,7 +83,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node index.js",
     "dev": "nodemon server.js",
     "render": "node start.js"
   },

@@ -18,10 +18,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Servir archivos estáticos
+// Serve static files
 app.use(express.static(__dirname));
 
-// Ruta específica para el index.html
+// Specific route for index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -42,7 +42,7 @@ app.get('/debug', (req, res) => {
   });
 });
 
-// Ruta para verificar archivos específicos
+// Route to check specific files
 app.get('/check/:filename', (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(__dirname, filename);
@@ -67,18 +67,18 @@ const gameState = {
   }
 };
 
-// Generar ID único para jugador
+// Generate unique ID for player
 function generatePlayerId() {
   return Math.floor(Math.random() * 1000000) + 1;
 }
 
-// Obtener jugadores en una instancia específica
+// Get players in a specific instance
 function getPlayersInInstance(instanceId) {
   return Array.from(gameState.players.values())
     .filter(player => player.instance === instanceId);
 }
 
-// Broadcast a todos los jugadores en una instancia
+// Broadcast to all players in an instance
 function broadcastToInstance(instanceId, event, data) {
   const playersInInstance = getPlayersInInstance(instanceId);
   playersInInstance.forEach(player => {
@@ -87,9 +87,9 @@ function broadcastToInstance(instanceId, event, data) {
 }
 
 io.on('connection', (socket) => {
-  console.log('Nuevo jugador conectado:', socket.id);
+      console.log('New player connected:', socket.id);
 
-  // Cuando un jugador se une al juego
+  // When a player joins the game
   socket.on('joinGame', (playerData) => {
     const playerId = generatePlayerId();
     const player = {
@@ -112,27 +112,27 @@ io.on('connection', (socket) => {
     gameState.players.set(socket.id, player);
     gameState.instances[player.instance].push(player);
 
-    // Enviar estado actual de la instancia al nuevo jugador
+    // Send current instance state to the new player
     const playersInInstance = getPlayersInInstance(player.instance);
     socket.emit('gameState', {
       players: playersInInstance,
       myId: playerId
     });
 
-    // Notificar a otros jugadores en la misma instancia
+    // Notify other players in the same instance
     broadcastToInstance(player.instance, 'playerJoined', player);
     
-    console.log(`Jugador ${player.username} se unió a la instancia ${player.instance}`);
+    console.log(`Player ${player.username} joined instance ${player.instance}`);
   });
 
-  // Cuando un jugador se mueve
+  // When a player moves
   socket.on('playerMove', (moveData) => {
     const player = gameState.players.get(socket.id);
     if (!player) return;
 
-    console.log(`Jugador ${player.username} se mueve:`, moveData);
+    console.log(`Player ${player.username} moves:`, moveData);
 
-    // Actualizar posición del jugador
+    // Update player position
     player.x = moveData.x;
     player.y = moveData.y;
     player.walkingRight = moveData.walkingRight;
@@ -141,9 +141,9 @@ io.on('connection', (socket) => {
     player.walkTime = moveData.walkTime;
     player.lastDir = moveData.lastDir;
 
-    // Broadcast a otros jugadores en la misma instancia
+    // Broadcast to other players in the same instance
     const playersInInstance = getPlayersInInstance(player.instance);
-    console.log(`Broadcasting a ${playersInInstance.length - 1} jugadores en instancia ${player.instance}`);
+    console.log(`Broadcasting to ${playersInInstance.length - 1} players in instance ${player.instance}`);
     playersInInstance.forEach(otherPlayer => {
       if (otherPlayer.socketId !== socket.id) {
         const moveDataToSend = {
@@ -156,13 +156,13 @@ io.on('connection', (socket) => {
           walkTime: player.walkTime,
           lastDir: player.lastDir
         };
-        console.log(`Enviando a ${otherPlayer.username}:`, moveDataToSend);
+        console.log(`Sending to ${otherPlayer.username}:`, moveDataToSend);
         io.to(otherPlayer.socketId).emit('playerMoved', moveDataToSend);
       }
     });
   });
 
-  // Cuando un jugador cambia de instancia
+  // When a player changes instance
   socket.on('changeInstance', (instanceData) => {
     const player = gameState.players.get(socket.id);
     if (!player) return;
@@ -170,33 +170,33 @@ io.on('connection', (socket) => {
     const oldInstance = player.instance;
     const newInstance = instanceData.instance;
 
-    // Remover jugador de la instancia anterior
+    // Remove player from previous instance
     gameState.instances[oldInstance] = gameState.instances[oldInstance]
       .filter(p => p.socketId !== socket.id);
 
-    // Agregar jugador a la nueva instancia
+    // Add player to new instance
     player.instance = newInstance;
     player.x = instanceData.x || 0;
     player.y = instanceData.y || 360;
     gameState.instances[newInstance].push(player);
 
-    // Notificar a jugadores en la instancia anterior
+    // Notify players in previous instance
     broadcastToInstance(oldInstance, 'playerLeft', { id: player.id });
 
-    // Notificar a jugadores en la nueva instancia
+    // Notify players in new instance
     broadcastToInstance(newInstance, 'playerJoined', player);
 
-    // Enviar estado de la nueva instancia al jugador
+    // Send new instance state to player
     const playersInNewInstance = getPlayersInInstance(newInstance);
     socket.emit('instanceChanged', {
       players: playersInNewInstance,
       instance: newInstance
     });
 
-    console.log(`Jugador ${player.username} cambió de instancia ${oldInstance} a ${newInstance}`);
+    console.log(`Player ${player.username} changed from instance ${oldInstance} to ${newInstance}`);
   });
 
-  // Cuando un jugador envía un mensaje
+  // When a player sends a message
   socket.on('sendMessage', (messageData) => {
     const player = gameState.players.get(socket.id);
     if (!player) return;
@@ -204,7 +204,7 @@ io.on('connection', (socket) => {
     player.message = messageData.message;
     player.messageTime = Date.now();
 
-    // Broadcast a otros jugadores en la misma instancia
+    // Broadcast to other players in the same instance
     const playersInInstance = getPlayersInInstance(player.instance);
     playersInInstance.forEach(otherPlayer => {
       if (otherPlayer.socketId !== socket.id) {
@@ -217,14 +217,14 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Cuando un jugador actualiza su nickname
+  // When a player updates their nickname
   socket.on('updateNickname', (data) => {
     const player = gameState.players.get(socket.id);
     if (player) {
       player.nickname = data.nickname;
-      console.log(`Jugador ${player.username} cambió su nickname a: ${data.nickname}`);
+      console.log(`Player ${player.username} changed nickname to: ${data.nickname}`);
       
-      // Notificar a otros jugadores en la misma instancia
+      // Notify other players in the same instance
       const playersInInstance = getPlayersInInstance(player.instance);
       playersInInstance.forEach(otherPlayer => {
         if (otherPlayer.socketId !== socket.id) {
@@ -237,27 +237,27 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Cuando un jugador se desconecta
+  // When a player disconnects
   socket.on('disconnect', () => {
     const player = gameState.players.get(socket.id);
     if (player) {
-      // Remover de la instancia
+      // Remove from instance
       gameState.instances[player.instance] = gameState.instances[player.instance]
         .filter(p => p.socketId !== socket.id);
       
       // Remover del estado global
       gameState.players.delete(socket.id);
 
-      // Notificar a otros jugadores
+      // Notify other players
       broadcastToInstance(player.instance, 'playerLeft', { id: player.id });
       
-      console.log(`Jugador ${player.username} se desconectó de la instancia ${player.instance}`);
+      console.log(`Player ${player.username} disconnected from instance ${player.instance}`);
     }
   });
 });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Servidor WebSocket ejecutándose en puerto ${PORT}`);
-  console.log(`Abre http://localhost:${PORT} en tu navegador`);
+  console.log(`WebSocket server running on port ${PORT}`);
+      console.log(`Open http://localhost:${PORT} in your browser`);
 }); 

@@ -32,7 +32,7 @@ const WALK_FRAMES = 4;
 let socket;
 let myId = null;
 let currentInstance = 0;
-let penguins = []; // Ahora será dinámico basado en jugadores conectados
+let penguins = []; // Now will be dynamic based on connected players
 const speed = 4;
 const MESSAGE_DURATION = 5000; // 5 seconds in ms
 
@@ -83,7 +83,7 @@ function initWebSocket() {
     penguins = data.players;
     myId = data.myId;
     
-    // Asignar nuestro nickname a nuestro propio jugador
+    // Assign our nickname to our own player
     const myPlayer = penguins.find(p => p.id === myId);
     if (myPlayer && myNickname) {
       myPlayer.nickname = myNickname;
@@ -93,13 +93,13 @@ function initWebSocket() {
   });
 
   socket.on('playerJoined', (player) => {
-    console.log('Nuevo jugador se unió:', player);
+    console.log('New player joined:', player);
     const existingPlayer = penguins.find(p => p.id === player.id);
     if (!existingPlayer) {
       penguins.push(player);
     }
     
-    // Si es nuestro propio jugador, asignar nuestro nickname
+    // If it's our own player, assign our nickname
     if (player.id === myId && myNickname) {
       player.nickname = myNickname;
     }
@@ -108,16 +108,16 @@ function initWebSocket() {
   });
 
   socket.on('playerLeft', (data) => {
-    console.log('Jugador se fue:', data);
+    console.log('Player left:', data);
     penguins = penguins.filter(p => p.id !== data.id);
     draw();
   });
 
   socket.on('playerMoved', (moveData) => {
-    console.log('Movimiento recibido:', moveData);
+    console.log('Movement received:', moveData);
     const player = penguins.find(p => p.id === moveData.id);
     if (player) {
-      console.log('Actualizando jugador:', player.username, 'Posición:', moveData.x, moveData.y, 'Walking:', moveData.walkingRight, moveData.walkingLeft);
+      console.log('Updating player:', player.username, 'Position:', moveData.x, moveData.y, 'Walking:', moveData.walkingRight, moveData.walkingLeft);
       player.x = moveData.x;
       player.y = moveData.y;
       player.walkingRight = moveData.walkingRight;
@@ -126,36 +126,36 @@ function initWebSocket() {
       player.walkTime = moveData.walkTime;
       player.lastDir = moveData.lastDir;
       
-      // Forzar actualización de animación para otros jugadores
+      // Force animation update for other players
       if (moveData.walkingRight || moveData.walkingLeft) {
-        // Si el jugador está caminando, asegurar que la animación se actualice
+        // If player is walking, ensure animation updates
         if (player.walkTime === 0) {
           player.walkTime = 1;
         }
       }
     } else {
-      console.log('Jugador no encontrado para movimiento:', moveData.id);
+      console.log('Player not found for movement:', moveData.id);
     }
   });
 
   socket.on('playerMessage', (messageData) => {
-    console.log('Mensaje recibido:', messageData);
+    console.log('Message received:', messageData);
     const player = penguins.find(p => p.id === messageData.id);
     if (player) {
       player.message = messageData.message;
       player.messageTime = messageData.messageTime;
-      console.log('Mensaje aplicado a jugador:', player.username, 'Mensaje:', player.message);
+      console.log('Message applied to player:', player.username, 'Message:', player.message);
     } else {
-      console.log('Jugador no encontrado para mensaje:', messageData.id);
+      console.log('Player not found for message:', messageData.id);
     }
   });
 
   socket.on('instanceChanged', (data) => {
-    console.log('Instancia cambiada:', data);
+    console.log('Instance changed:', data);
     penguins = data.players;
     currentInstance = data.instance;
     
-    // Asignar nuestro nickname a nuestro propio jugador
+    // Assign our nickname to our own player
     const myPlayer = penguins.find(p => p.id === myId);
     if (myPlayer && myNickname) {
       myPlayer.nickname = myNickname;
@@ -165,7 +165,7 @@ function initWebSocket() {
   });
 
   socket.on('playerNicknameUpdated', (data) => {
-    console.log('Nickname actualizado:', data);
+    console.log('Nickname updated:', data);
     const player = penguins.find(p => p.id === data.id);
     if (player) {
       player.nickname = data.nickname;
@@ -174,7 +174,7 @@ function initWebSocket() {
   });
 
   socket.on('disconnect', () => {
-    console.log('Desconectado del servidor');
+    console.log('Disconnected from server');
   });
 }
 
@@ -203,7 +203,7 @@ function draw() {
 
   const now = Date.now();
   const me = penguins.find(p => p.id === myId);
-  const PROXIMITY_DIST = 200; // Aumentado para que sea más fácil ver mensajes
+  const PROXIMITY_DIST = 200; // Increased to make messages easier to see
   
   penguins.forEach(p => {
     let frame = 0;
@@ -300,14 +300,14 @@ function draw() {
         const dist = Math.sqrt(dx*dx + dy*dy);
         
         if (dist < PROXIMITY_DIST && p.message && now - p.messageTime < MESSAGE_DURATION) {
-          console.log('Mostrando mensaje de jugador cercano:', p.username, 'Mensaje:', p.message, 'Distancia:', dist);
+          console.log('Showing message from nearby player:', p.username, 'Message:', p.message, 'Distance:', dist);
           drawSpeechBubble(p.x + PENGUIN_SIZE/2, p.y - 10, p.message);
         }
         if (p.message && now - p.messageTime >= MESSAGE_DURATION) {
           p.message = '';
         }
       } else {
-        // Si no hay jugador local, mostrar todos los mensajes (para debug)
+        // If no local player, show all messages (for debug)
         if (p.message && now - p.messageTime < MESSAGE_DURATION) {
           drawSpeechBubble(p.x + PENGUIN_SIZE/2, p.y - 10, p.message);
         }
@@ -527,9 +527,9 @@ function fadeStep() {
             me.x = 0;
           } else if (nextInstance < previousInstance) {
             // Moving left: appear at right edge
-            me.x = CANVAS_WIDTH - WALK_FRAME_SIZE;
-          }
-        // Notificar al servidor del cambio de instancia
+                      me.x = CANVAS_WIDTH - WALK_FRAME_SIZE;
+        }
+        // Notify server of instance change
         socket.emit('changeInstance', {
           instance: currentInstance,
           x: me.x,
@@ -588,7 +588,7 @@ function fadeStepSidebar() {
           // Same instance (shouldn't happen but just in case)
           me.x = 0;
         }
-        // Notificar al servidor del cambio de instancia
+        // Notify server of instance change
         socket.emit('changeInstance', {
           instance: currentInstance,
           x: me.x,
@@ -652,7 +652,7 @@ window.addEventListener('keydown', e => {
     me.lastDir = 'right';
   }
   
-  // Enviar movimiento al servidor
+      // Send movement to server
   if (socket) {
     const moveData = {
       x: me.x,
@@ -663,7 +663,7 @@ window.addEventListener('keydown', e => {
       walkTime: me.walkTime,
       lastDir: me.lastDir
     };
-    console.log('Enviando movimiento:', moveData);
+    console.log('Sending movement:', moveData);
     socket.emit('playerMove', moveData);
   }
   
@@ -685,25 +685,25 @@ window.addEventListener('keyup', e => {
     me.walkTime = 0;
   }
   
-          // Enviar estado actualizado al servidor
-        if (socket) {
-          socket.emit('playerMove', {
-            x: me.x,
-            y: me.y,
-            walkingRight: me.walkingRight,
-            walkingLeft: me.walkingLeft,
-            walkFrame: me.walkFrame,
-            walkTime: me.walkTime,
-            lastDir: me.lastDir
-          });
-        }
+      // Send updated state to server
+  if (socket) {
+    socket.emit('playerMove', {
+      x: me.x,
+      y: me.y,
+      walkingRight: me.walkingRight,
+      walkingLeft: me.walkingLeft,
+      walkFrame: me.walkFrame,
+      walkTime: me.walkTime,
+      lastDir: me.lastDir
+    });
+  }
   
   draw();
 });
 
 
 
-// Modifica el chat para detectar si el mensaje es para un NPC y responder
+// Modify chat to detect if message is for an NPC and respond
 const chatInput = document.getElementById('chat-input');
 chatInput.addEventListener('keydown', async e => {
   if (e.key === 'Enter') {
@@ -720,12 +720,12 @@ chatInput.addEventListener('keydown', async e => {
         me.walkFrame = 0;
         me.walkTime = 0;
         
-        // Enviar mensaje al servidor
+        // Send message to server
         if (socket) {
           socket.emit('sendMessage', { message: msg });
         }
         
-        // Enviar movimiento actualizado
+        // Send updated movement
         if (socket) {
           socket.emit('playerMove', {
             x: me.x,
@@ -744,7 +744,7 @@ chatInput.addEventListener('keydown', async e => {
 
 // Walking animation
 function updateWalkAnim() {
-  // Actualizar animación del jugador local
+      // Update local player animation
   const me = penguins.find(p => p.id === myId);
   if (me && (me.walkingRight || me.walkingLeft)) {
     me.walkTime = (me.walkTime || 0) + 1;
@@ -756,14 +756,14 @@ function updateWalkAnim() {
     me.walkTime = 0;
   }
   
-  // Actualizar animaciones de otros jugadores
+  // Update other players' animations
   penguins.forEach(player => {
     if (player.id !== myId) {
       if (player.walkingRight || player.walkingLeft) {
         player.walkTime = (player.walkTime || 0) + 1;
         if (player.walkTime % 6 === 0) {
           player.walkFrame = ((player.walkFrame || 0) + 1) % WALK_FRAMES;
-          console.log(`Animación de ${player.username}: frame ${player.walkFrame}, walking: ${player.walkingRight ? 'right' : 'left'}`);
+          console.log(`Animation of ${player.username}: frame ${player.walkFrame}, walking: ${player.walkingRight ? 'right' : 'left'}`);
         }
       } else {
         player.walkFrame = 0;
@@ -804,6 +804,12 @@ window.addEventListener('DOMContentLoaded', () => {
   if (btnMusic) btnMusic.onclick = () => goToInstance(2);
   if (btnDimensional) btnDimensional.onclick = () => goToInstance(3);
   if (btnZone5) btnZone5.onclick = () => goToInstance(4);
+  
+  // Social media buttons
+  const btnTwitter = document.getElementById('btn-twitter');
+  const btnTelegram = document.getElementById('btn-telegram');
+  if (btnTwitter) btnTwitter.onclick = () => window.open('https://x.com/PengVerseABS', '_blank');
+  if (btnTelegram) btnTelegram.onclick = () => window.open('https://t.me/PenguVerseABS', '_blank');
   
   // Inicializar WebSocket
   initWebSocket();

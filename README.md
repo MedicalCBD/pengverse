@@ -1,69 +1,69 @@
 # PengCity - Multiplayer Game
 
-Un juego multiplayer de pinguinos usando WebSocket API con Socket.IO.
+A multiplayer penguin game using WebSocket API with Socket.IO.
 
-## Características
+## Features
 
-- **Multiplayer en tiempo real**: Juega con otros pinguinos en las mismas instancias
-- **5 zonas diferentes**: MAIN, SHILLERS CAMP, MUSIC SECTOR, DIMENSIONAL, FLEX ZONE
-- **Chat en tiempo real**: Comunícate con otros jugadores
-- **Animaciones**: Pinguinos con animaciones de caminata
-- **Efectos especiales**: Distorsión en la zona DIMENSIONAL
-- **Música**: Reproducción automática en MUSIC SECTOR
+- **Real-time multiplayer**: Play with other penguins in the same instances
+- **5 different zones**: MAIN, SHILLERS CAMP, MUSIC SECTOR, DIMENSIONAL, FLEX ZONE
+- **Real-time chat**: Communicate with other players
+- **Animations**: Penguins with walking animations
+- **Special effects**: Distortion in the DIMENSIONAL zone
+- **Music**: Auto-play in MUSIC SECTOR
 
-## Instalación
+## Installation
 
-1. Asegúrate de tener Node.js instalado
-2. Instala las dependencias:
+1. Make sure you have Node.js installed
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-## Ejecutar el juego
+## Running the game
 
-### Desarrollo (con auto-reload)
+### Development (with auto-reload)
 ```bash
 npm run dev
 ```
 
-### Producción
+### Production
 ```bash
 npm start
 ```
 
-El servidor se ejecutará en `http://localhost:3000`
+The server will run on `http://localhost:3000`
 
-## Cómo jugar
+## How to play
 
-1. Abre `http://localhost:3000` en tu navegador
-2. Usa las flechas izquierda/derecha para moverte
-3. Escribe mensajes en el chat y presiona Enter
-4. Usa los botones de la barra lateral para cambiar de zona
-5. Ve a la zona DIMENSIONAL para experimentar efectos especiales
+1. Open `http://localhost:3000` in your browser
+2. Use left/right arrows to move
+3. Type messages in the chat and press Enter
+4. Use the sidebar buttons to change zones
+5. Go to the DIMENSIONAL zone to experience special effects
 
-## Controles
+## Controls
 
-- **Flechas izquierda/derecha**: Mover el pinguino
-- **Chat**: Escribe mensajes para comunicarte con otros jugadores
-- **Botones de la barra lateral**: Cambiar de zona instantáneamente
+- **Left/right arrows**: Move the penguin
+- **Chat**: Type messages to communicate with other players
+- **Sidebar buttons**: Change zones instantly
 
-## Tecnologías utilizadas
+## Technologies used
 
-- **Frontend**: HTML5 Canvas, JavaScript vanilla
+- **Frontend**: HTML5 Canvas, Vanilla JavaScript
 - **Backend**: Node.js, Express
 - **WebSocket**: Socket.IO
-- **Assets**: Sprites de pinguinos y fondos
+- **Assets**: Penguin sprites and backgrounds
 
-## Estructura del proyecto
+## Project structure
 
 ```
 pengcity/
-├── server.js          # Servidor WebSocket
-├── main.js           # Lógica del juego (cliente)
-├── index.html        # Página principal
-├── style.css         # Estilos
-├── package.json      # Dependencias
-└── assets/          # Imágenes y audio
+├── server.js          # WebSocket server
+├── main.js           # Game logic (client)
+├── index.html        # Main page
+├── style.css         # Styles
+├── package.json      # Dependencies
+└── assets/          # Images and audio
     ├── background*.png
     ├── peng*.png
     └── musicroom.mp3
@@ -71,19 +71,19 @@ pengcity/
 
 ## Multiplayer Features
 
-- **Sincronización en tiempo real**: Todos los jugadores ven los mismos movimientos
-- **Chat por proximidad**: Solo ves mensajes de jugadores cercanos
-- **Cambio de instancias**: Los jugadores pueden moverse entre zonas
-- **Gestión de conexiones**: Manejo automático de desconexiones
+- **Real-time synchronization**: All players see the same movements
+- **Proximity chat**: You only see messages from nearby players
+- **Instance switching**: Players can move between zones
+- **Connection management**: Automatic handling of disconnections
 
-## Desarrollo
+## Development
 
-Para agregar nuevas características:
+To add new features:
 
-1. Modifica `server.js` para agregar nuevos eventos WebSocket
-2. Actualiza `main.js` para manejar los nuevos eventos del cliente
-3. Agrega nuevos assets en la carpeta correspondiente
+1. Modify `server.js` to add new WebSocket events
+2. Update `main.js` to handle new client events
+3. Add new assets in the corresponding folder
 
-## Licencia
+## License
 
 ISC 

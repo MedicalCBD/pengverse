@@ -3,26 +3,29 @@
 #nickname-container {
   position: fixed;
   top: 20px;
-  left: 50%;
+  left: calc(50% + 90px);
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.8);
-  padding: 10px;
+  padding: 12px 16px;
   border-radius: 8px;
   border: 2px solid #00fff5;
+  box-shadow: 0 4px 12px rgba(0, 255, 245, 0.3);
 }
 
 #nickname-input {
-  padding: 8px 12px;
+  padding: 10px 14px;
   border: 2px solid #00fff5;
   background: rgba(0, 0, 0, 0.9);
   color: #00fff5;
-  border-radius: 4px;
+  border-radius: 6px;
   font-family: 'Press Start 2P', monospace;
-  font-size: 12px;
-  width: 200px;
+  font-size: 11px;
+  width: 180px;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
 #nickname-input::placeholder {
@@ -31,15 +34,17 @@
 }
 
 #set-nickname-btn {
-  padding: 8px 12px;
+  padding: 10px 14px;
   background: #00fff5;
   color: #000;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   font-family: 'Press Start 2P', monospace;
   font-size: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: bold;
+  min-width: 80px;
 }
 
 #set-nickname-btn:hover {

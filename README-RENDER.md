@@ -1,36 +1,36 @@
 # 🐧 PengCity - Multiplayer Game
 
-## 🚀 Deploy en Render
+## 🚀 Deploy on Render
 
-### **Pasos para desplegar:**
+### **Steps to deploy:**
 
-1. **Conecta tu repositorio de GitHub a Render**
-2. **Crea un nuevo Web Service**
-3. **Configuración:**
+1. **Connect your GitHub repository to Render**
+2. **Create a new Web Service**
+3. **Configuration:**
    - **Build Command:** `npm install`
    - **Start Command:** `npm start`
    - **Environment:** Node
 
-### **Variables de entorno:**
+### **Environment variables:**
 - `NODE_ENV=production`
-- `PORT` (Render lo asigna automáticamente)
+- `PORT` (Render assigns automatically)
 
-### **Dominio personalizado:**
-- Render te dará un dominio automático: `https://tu-app.onrender.com`
-- Puedes configurar un dominio personalizado en la configuración
+### **Custom domain:**
+- Render will give you an automatic domain: `https://tu-app.onrender.com`
+- You can configure a custom domain in settings
 
-### **Características:**
-✅ **WebSocket real-time**  
-✅ **Multiplayer completo**  
-✅ **Chat con burbujas**  
-✅ **5 instancias/zones**  
-✅ **Sistema de nicknames**  
-✅ **Animaciones sincronizadas**  
+### **Features:**
+✅ **Real-time WebSocket**  
+✅ **Complete multiplayer**  
+✅ **Chat with bubbles**  
+✅ **5 instances/zones**  
+✅ **Nickname system**  
+✅ **Synchronized animations**  
 
-### **Para jugar:**
-1. Comparte el enlace de Render con tus amigos
-2. ¡Disfruta del multiplayer sin configurar nada!
+### **To play:**
+1. Share the Render link with your friends
+2. Enjoy multiplayer without any setup!
 
 ---
 
-**¡Render es perfecto para WebSockets!** 🎮✨ 
+**Render is perfect for WebSockets!** 🎮✨ 
