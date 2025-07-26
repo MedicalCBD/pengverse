@@ -264,7 +264,7 @@ function draw() {
     if (p.nickname && p.nickname.length > 0) {
       ctx.save();
       ctx.font = '12px "Press Start 2P", monospace';
-      ctx.fillStyle = '#00fff5';
+      ctx.fillStyle = '#ff7d00';
       ctx.strokeStyle = '#000';
       ctx.lineWidth = 2;
       ctx.textAlign = 'center';
@@ -333,7 +333,7 @@ function draw() {
     
     // Draw title
     ctx.font = '48px "Press Start 2P", monospace';
-    ctx.fillStyle = '#00fff5';
+    ctx.fillStyle = '#ff7d00';
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 3;
     ctx.textAlign = 'center';
@@ -831,8 +831,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // Social media buttons
   const btnTwitter = document.getElementById('btn-twitter');
   const btnTelegram = document.getElementById('btn-telegram');
-  if (btnTwitter) btnTwitter.onclick = () => window.open('https://x.com/PengVerseABS', '_blank');
-  if (btnTelegram) btnTelegram.onclick = () => window.open('https://t.me/PenguVerseABS', '_blank');
+  if (btnTwitter) btnTwitter.onclick = () => window.open('https://x.com/BonkMetaverse', '_blank');
+  if (btnTelegram) btnTelegram.onclick = () => window.open('https://t.me/BONKMETAVERSE', '_blank');
 
   // Mobile movement controls
   const btnMobileLeft = document.getElementById('mobile-left');
