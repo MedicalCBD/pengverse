@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PengCity</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="nickname-container">
+    <input type="text" id="nickname-input" placeholder="Enter your nickname..." maxlength="15">
+    <button id="set-nickname-btn">Set Nickname</button>
+  </div>
+  
+  <div id="sidebar">
+    <button id="btn-main">MAIN</button>
+    <button id="btn-shillers">SHILLERS CAMP</button>
+    <button id="btn-music">MUSIC SECTOR</button>
+    <button id="btn-dimensional">DIMENSIONAL</button>
+    <button id="btn-zone5">FLEX ZONE</button>
+    <div id="sidebar-social">
+      <button id="btn-twitter">Twitter</button>
+      <button id="btn-telegram">Telegram</button>
+    </div>
+  </div>
+  <div id="game-container">
+    <canvas id="game-canvas" width="900" height="450"></canvas>
+    <div id="chat-bar">
+      <input type="text" id="chat-input" placeholder="Type a message and press Enter..." autocomplete="off">
+    </div>
+  </div>
+  <audio id="music-audio" src="musicroom.mp3"></audio>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="https://download.playfab.com/PlayFabClientApi.js"></script>
+  <script src="main.js"></script>
+  <script>
+    document.getElementById('btn-twitter').onclick = function() {
+      window.open('https://x.com/pengulandABS', '_blank');
+    };
+    document.getElementById('btn-telegram').onclick = function() {
+      window.open('https://t.me/PengulandABS', '_blank');
+    };
+  </script>
+</body>
+</html> 

@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+#nickname-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #00fff5;
+}
+
+#nickname-input {
+  padding: 8px 12px;
+  border: 2px solid #00fff5;
+  background: rgba(0, 0, 0, 0.9);
+  color: #00fff5;
+  border-radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  width: 200px;
+}
+
+#nickname-input::placeholder {
+  color: #00fff5;
+  opacity: 0.7;
+}
+
+#set-nickname-btn {
+  padding: 8px 12px;
+  background: #00fff5;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#set-nickname-btn:hover {
+  background: #00cccc;
+  transform: scale(1.05);
+}
+
+#sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 180px;
+  background: #222831;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 24px;
+  box-shadow: 2px 0 12px #0004;
+  z-index: 10;
+}
+#sidebar button {
+  width: 150px;
+  margin: 18px 0;
+  padding: 18px 0;
+  font-size: 8px;
+  font-family: 'Press Start 2P', cursive, monospace;
+  border: 3px solid #00adb5;
+  border-radius: 12px;
+  background: #393e46;
+  color: #00fff5;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #00adb5, 0 8px 16px #0006;
+  letter-spacing: 1px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
+}
+#sidebar button:hover {
+  background: #00adb5;
+  color: #222831;
+  border-color: #fff;
+  box-shadow: 0 2px 0 #fff, 0 8px 24px #00fff588;
+}
+#sidebar-social {
+  margin-top: auto;
+  margin-bottom: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+#sidebar-social button {
+  width: 120px;
+  padding: 8px 0;
+  font-size: 9px;
+  font-family: 'Press Start 2P', cursive, monospace;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  box-shadow: 0 2px 8px #0002;
+  letter-spacing: 1px;
+  margin-bottom: 0;
+}
+#btn-twitter {
+  background: #1da1f2;
+  color: #fff;
+  border: 2px solid #1a8cd8;
+}
+#btn-twitter:hover {
+  background: #0d8ddb;
+  border-color: #fff;
+}
+#btn-telegram {
+  background: #229ed9;
+  color: #fff;
+  border: 2px solid #178bbd;
+}
+#btn-telegram:hover {
+  background: #178bbd;
+  border-color: #fff;
+}
+
+body {
+  background: #cfd8dc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#game-container {
+  box-shadow: 0 4px 32px #0002;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fff;
+  margin-left: 200px;
+}
+
+#game-canvas {
+  display: block;
+  background: #222;
+}
+
+#chat-bar {
+  width: 860px;
+  background: #f5f5f5;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#chat-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  outline: none;
+} 
