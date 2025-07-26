@@ -12,6 +12,12 @@ const io = socketIo(server, {
   }
 });
 
+// Middleware para logging
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 // Servir archivos estáticos
 app.use(express.static(__dirname));
 
@@ -34,6 +40,19 @@ app.get('/debug', (req, res) => {
       'pengleft.png'
     ]
   });
+});
+
+// Ruta para verificar archivos específicos
+app.get('/check/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, filename);
+  const fs = require('fs');
+  
+  if (fs.existsSync(filePath)) {
+    res.json({ exists: true, filename });
+  } else {
+    res.json({ exists: false, filename });
+  }
 });
 
 // Almacenar el estado del juego
