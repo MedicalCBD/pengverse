@@ -15,6 +15,27 @@ const io = socketIo(server, {
 // Servir archivos estáticos
 app.use(express.static(__dirname));
 
+// Ruta específica para el index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Rutas de debug para verificar archivos
+app.get('/debug', (req, res) => {
+  res.json({
+    message: 'Server is running',
+    files: [
+      'index.html',
+      'main.js',
+      'server.js',
+      'style.css',
+      'background.png',
+      'pengwalk.png',
+      'pengleft.png'
+    ]
+  });
+});
+
 // Almacenar el estado del juego
 const gameState = {
   players: new Map(), // socketId -> playerData
