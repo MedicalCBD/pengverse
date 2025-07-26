@@ -810,7 +810,64 @@ window.addEventListener('DOMContentLoaded', () => {
   const btnTelegram = document.getElementById('btn-telegram');
   if (btnTwitter) btnTwitter.onclick = () => window.open('https://x.com/PengVerseABS', '_blank');
   if (btnTelegram) btnTelegram.onclick = () => window.open('https://t.me/PenguVerseABS', '_blank');
-  
+
+  // Mobile movement controls
+  const btnMobileLeft = document.getElementById('mobile-left');
+  const btnMobileRight = document.getElementById('mobile-right');
+  function emitMove() {
+    const me = penguins.find(p => p.id === myId);
+    if (!me || !socket) return;
+    socket.emit('playerMove', {
+      x: me.x,
+      y: me.y,
+      walkingRight: me.walkingRight,
+      walkingLeft: me.walkingLeft,
+      walkFrame: me.walkFrame,
+      walkTime: me.walkTime,
+      lastDir: me.lastDir
+    });
+  }
+  if (btnMobileLeft) {
+    btnMobileLeft.addEventListener('touchstart', e => {
+      e.preventDefault();
+      const me = penguins.find(p => p.id === myId);
+      if (me) {
+        me.walkingLeft = true;
+        me.walkingRight = false;
+        me.lastDir = 'left';
+        emitMove();
+      }
+    });
+    btnMobileLeft.addEventListener('touchend', e => {
+      e.preventDefault();
+      const me = penguins.find(p => p.id === myId);
+      if (me) {
+        me.walkingLeft = false;
+        emitMove();
+      }
+    });
+  }
+  if (btnMobileRight) {
+    btnMobileRight.addEventListener('touchstart', e => {
+      e.preventDefault();
+      const me = penguins.find(p => p.id === myId);
+      if (me) {
+        me.walkingRight = true;
+        me.walkingLeft = false;
+        me.lastDir = 'right';
+        emitMove();
+      }
+    });
+    btnMobileRight.addEventListener('touchend', e => {
+      e.preventDefault();
+      const me = penguins.find(p => p.id === myId);
+      if (me) {
+        me.walkingRight = false;
+        emitMove();
+      }
+    });
+  }
+
   // Inicializar WebSocket
   initWebSocket();
   
