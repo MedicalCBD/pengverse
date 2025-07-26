@@ -3,8 +3,9 @@ services:
     name: pengcity-game
     env: node
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node start.js
     plan: free
     envVars:
       - key: NODE_ENV
-        value: production 
+        value: production
+    healthCheckPath: /debug 
