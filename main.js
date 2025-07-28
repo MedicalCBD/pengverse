@@ -1191,7 +1191,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const btnBuy = document.getElementById('btn-buy');
   if (btnTwitter) btnTwitter.onclick = () => window.open('https://x.com/absventuretime', '_blank');
   if (btnTelegram) btnTelegram.onclick = () => window.open('https://t.me/AbsventureTime', '_blank');
-  if (btnBuy) btnBuy.onclick = () => window.open('https://dexscreener.com/moonshot/new/abstract', '_blank');
+  if (btnBuy) btnBuy.onclick = () => window.open('https://dexscreener.com/abstract/0xf851a751cf4e8d185bc5d40a1b782bb7a3771bdd', '_blank');
 
   // Mobile movement controls
   const btnMobileLeft = document.getElementById('mobile-left');
