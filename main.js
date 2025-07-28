@@ -140,6 +140,9 @@ function initWebSocket() {
       player.walkFrame = moveData.walkFrame;
       player.walkTime = moveData.walkTime;
       player.lastDir = moveData.lastDir;
+      if (moveData.characterType) {
+        player.characterType = moveData.characterType;
+      }
       
       // Force animation update for other players
       if (moveData.walkingRight || moveData.walkingLeft) {

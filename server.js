@@ -106,7 +106,8 @@ io.on('connection', (socket) => {
       walkTime: 0,
       lastDir: 'right',
       username: playerData.username || `Penguin${playerId}`,
-      nickname: playerData.nickname || ''
+      nickname: playerData.nickname || '',
+      characterType: playerData.characterType || 'penguin'
     };
 
     gameState.players.set(socket.id, player);
@@ -140,6 +141,9 @@ io.on('connection', (socket) => {
     player.walkFrame = moveData.walkFrame;
     player.walkTime = moveData.walkTime;
     player.lastDir = moveData.lastDir;
+    if (moveData.characterType) {
+      player.characterType = moveData.characterType;
+    }
 
     // Broadcast to other players in the same instance
     const playersInInstance = getPlayersInInstance(player.instance);
@@ -154,7 +158,8 @@ io.on('connection', (socket) => {
           walkingLeft: player.walkingLeft,
           walkFrame: player.walkFrame,
           walkTime: player.walkTime,
-          lastDir: player.lastDir
+          lastDir: player.lastDir,
+          characterType: player.characterType
         };
         console.log(`Sending to ${otherPlayer.username}:`, moveDataToSend);
         io.to(otherPlayer.socketId).emit('playerMoved', moveDataToSend);
@@ -231,6 +236,26 @@ io.on('connection', (socket) => {
           io.to(otherPlayer.socketId).emit('playerNicknameUpdated', {
             id: player.id,
             nickname: data.nickname
+          });
+        }
+      });
+    }
+  });
+
+  // When a player updates their character
+  socket.on('updateCharacter', (data) => {
+    const player = gameState.players.get(socket.id);
+    if (player) {
+      player.characterType = data.characterType;
+      console.log(`Player ${player.username} changed character to: ${data.characterType}`);
+      
+      // Notify other players in the same instance
+      const playersInInstance = getPlayersInInstance(player.instance);
+      playersInInstance.forEach(otherPlayer => {
+        if (otherPlayer.socketId !== socket.id) {
+          io.to(otherPlayer.socketId).emit('playerCharacterUpdated', {
+            id: player.id,
+            characterType: data.characterType
           });
         }
       });
