@@ -16,12 +16,23 @@ penguinWalkImg.src = 'pengwalk.png';
 const penguinLeftImg = new Image();
 penguinLeftImg.src = 'pengleft.png';
 
+// Finn character sprites
+const finnWalkImg = new Image();
+finnWalkImg.src = 'finnwalk.png';
+const finnLeftImg = new Image();
+finnLeftImg.src = 'finnleft.png';
+
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
 const PENGUIN_SIZE = 64;
-const WALK_FRAME_SIZE = 32;
-const WALK_FRAMES = 4;
+const WALK_FRAME_SIZE = 46.714; // 327px width / 7 frames = 46.714px per frame
+const WALK_FRAMES = 7;
+
+// Finn sprite constants
+const FINN_FRAME_SIZE = 32; // Using 32px for easier calculations
+const FINN_FRAMES = 16;
+const FINN_SIZE = 64;
 
 // WebSocket connection
 let socket;
@@ -52,6 +63,10 @@ const TITLE_DURATION = 5000; // 5 seconds
 let myNickname = '';
 let nicknameInput = null;
 let setNicknameBtn = null;
+let changeCharacterBtn = null;
+
+// Character type for current player
+let myCharacterType = 'penguin'; // 'penguin' or 'finn'
 
 // Inicializar WebSocket
 function initWebSocket() {
@@ -63,13 +78,18 @@ function initWebSocket() {
     // Initialize nickname system
     initNickname();
     
+    // Randomly assign character type
+    myCharacterType = Math.random() < 0.5 ? 'penguin' : 'finn';
+    console.log('Assigned character type:', myCharacterType);
+    
     // Unirse al juego
     socket.emit('joinGame', {
       x: 200,
       y: 360,
       instance: currentInstance,
       username: `Penguin${Math.floor(Math.random() * 1000)}`,
-      nickname: myNickname
+      nickname: myNickname,
+      characterType: myCharacterType
     });
   });
 
@@ -168,6 +188,15 @@ function initWebSocket() {
     }
   });
 
+  socket.on('playerCharacterUpdated', (data) => {
+    console.log('Character updated:', data);
+    const player = penguins.find(p => p.id === data.id);
+    if (player) {
+      player.characterType = data.characterType;
+      draw();
+    }
+  });
+
   socket.on('disconnect', () => {
     console.log('Disconnected from server');
   });
@@ -191,6 +220,99 @@ function stopDistortionLoop() {
   distortionActive = false;
 }
 
+function drawCharacter(p, isMyPlayer) {
+  const characterType = p.characterType || 'penguin';
+  let frame = 0;
+  let img, frameSize, totalFrames, charSize;
+  
+  // Determine character properties based on type
+  if (characterType === 'finn') {
+    frameSize = FINN_FRAME_SIZE;
+    totalFrames = FINN_FRAMES;
+    charSize = FINN_SIZE;
+  } else {
+    frameSize = WALK_FRAME_SIZE;
+    totalFrames = WALK_FRAMES;
+    charSize = PENGUIN_SIZE;
+  }
+  
+  // Determine which image and frame to use
+  if (characterType === 'finn') {
+    if (p.walkingRight) {
+      frame = p.walkFrame % totalFrames;
+      img = finnWalkImg;
+    } else if (p.walkingLeft) {
+      frame = p.walkFrame % totalFrames;
+      img = finnLeftImg;
+    } else {
+      // Idle: show frame 0 facing last direction
+      img = (p.lastDir === 'left') ? finnLeftImg : finnWalkImg;
+      frame = 0;
+    }
+  } else {
+    // Penguin character
+    if (p.walkingRight) {
+      frame = p.walkFrame;
+      img = penguinWalkImg;
+    } else if (p.walkingLeft) {
+      frame = p.walkFrame;
+      img = penguinLeftImg;
+    } else {
+      // Idle: show frame 0 facing last direction
+      img = (p.lastDir === 'left') ? penguinLeftImg : penguinWalkImg;
+      frame = 0;
+    }
+  }
+  
+  // Distortion effect for player in DIMENSIONAL
+  if (currentInstance === 3 && isMyPlayer && distortionActive) {
+    ctx.save();
+    const cx = p.x + charSize/2;
+    const cy = p.y + charSize/2;
+    ctx.translate(cx, cy);
+    ctx.rotate((Math.random() - 0.5) * 0.6); // random rotation
+    const scale = 1 + (Math.random() - 0.5) * 0.5; // random scale
+    ctx.scale(scale, scale);
+    
+    // Use precise frame calculation for both characters
+    if (characterType === 'finn') {
+      const actualFrameWidth = 507 / 16; // 31.6875px per frame
+      ctx.drawImage(
+        img,
+        frame * actualFrameWidth, 0, actualFrameWidth, 32,
+        -charSize/2, -charSize/2, charSize, charSize
+      );
+    } else {
+      // Penguin character
+      const actualFrameWidth = 327 / 7; // 46.714px per frame
+      ctx.drawImage(
+        img,
+        frame * actualFrameWidth, 0, actualFrameWidth, 50,
+        -charSize/2, -charSize/2, charSize, charSize
+      );
+    }
+    ctx.restore();
+  } else {
+    // Use precise frame calculation for both characters
+    if (characterType === 'finn') {
+      const actualFrameWidth = 507 / 16; // 31.6875px per frame
+      ctx.drawImage(
+        img,
+        frame * actualFrameWidth, 0, actualFrameWidth, 32,
+        p.x, p.y, charSize, charSize
+      );
+    } else {
+      // Penguin character
+      const actualFrameWidth = 327 / 7; // 46.714px per frame
+      ctx.drawImage(
+        img,
+        frame * actualFrameWidth, 0, actualFrameWidth, 50,
+        p.x, p.y, charSize, charSize
+      );
+    }
+  }
+}
+
 function draw() {
   // Background
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -201,67 +323,14 @@ function draw() {
   const PROXIMITY_DIST = 200; // Increased to make messages easier to see
   
   penguins.forEach(p => {
-    let frame = 0;
-    let img = penguinWalkImg;
+    const isMyPlayer = p.id === myId;
+    drawCharacter(p, isMyPlayer);
     
-    if (p.id === myId) {
-      if (p.walkingRight) {
-        frame = p.walkFrame;
-        img = penguinWalkImg;
-      } else if (p.walkingLeft) {
-        frame = p.walkFrame;
-        img = penguinLeftImg;
-      } else {
-        // Idle: show frame 0 facing last direction
-        img = (p.lastDir === 'left') ? penguinLeftImg : penguinWalkImg;
-        frame = 0;
-      }
-    } else {
-      // Other penguins: use their actual walking state and direction
-      if (p.walkingRight) {
-        frame = p.walkFrame;
-        img = penguinWalkImg;
-        if (p.walkFrame > 0) {
-          console.log(`${p.username} caminando derecha, frame: ${p.walkFrame}, usando pengwalk.png`);
-        }
-      } else if (p.walkingLeft) {
-        frame = p.walkFrame;
-        img = penguinLeftImg;
-        if (p.walkFrame > 0) {
-          console.log(`${p.username} caminando izquierda, frame: ${p.walkFrame}, usando pengleft.png`);
-        }
-      } else {
-        // Idle: show frame 0 facing last direction
-        img = (p.lastDir === 'left') ? penguinLeftImg : penguinWalkImg;
-        frame = 0;
-      }
-    }
-    
-    // Distortion effect for player in DIMENSIONAL
-    if (currentInstance === 3 && p.id === myId && distortionActive) {
-      ctx.save();
-      const cx = p.x + PENGUIN_SIZE/2;
-      const cy = p.y + PENGUIN_SIZE/2;
-      ctx.translate(cx, cy);
-      ctx.rotate((Math.random() - 0.5) * 0.6); // random rotation
-      const scale = 1 + (Math.random() - 0.5) * 0.5; // random scale
-      ctx.scale(scale, scale);
-      ctx.drawImage(
-        img,
-        frame * WALK_FRAME_SIZE, 0, WALK_FRAME_SIZE, WALK_FRAME_SIZE,
-        -PENGUIN_SIZE/2, -PENGUIN_SIZE/2, PENGUIN_SIZE, PENGUIN_SIZE
-      );
-      ctx.restore();
-    } else {
-      ctx.drawImage(
-        img,
-        frame * WALK_FRAME_SIZE, 0, WALK_FRAME_SIZE, WALK_FRAME_SIZE,
-        p.x, p.y, PENGUIN_SIZE, PENGUIN_SIZE
-      );
-    }
-    
-    // Draw nickname above penguin
+    // Draw nickname above character
     if (p.nickname && p.nickname.length > 0) {
+      const characterType = p.characterType || 'penguin';
+      const charSize = characterType === 'finn' ? FINN_SIZE : PENGUIN_SIZE;
+      
       ctx.save();
       ctx.font = '12px "Press Start 2P", monospace';
       ctx.fillStyle = '#ff7d00';
@@ -270,7 +339,7 @@ function draw() {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       
-      const nicknameX = p.x + PENGUIN_SIZE / 2;
+      const nicknameX = p.x + charSize / 2;
       const nicknameY = p.y - 5;
       
       // Draw stroke
@@ -281,22 +350,27 @@ function draw() {
     }
     
     // Show message only if it's the player or if close
+    const characterType = p.characterType || 'penguin';
+    const charSize = characterType === 'finn' ? FINN_SIZE : PENGUIN_SIZE;
+    
     if (p.id === myId) {
       if (p.message && now - p.messageTime < MESSAGE_DURATION) {
-        drawSpeechBubble(p.x + PENGUIN_SIZE/2, p.y - 10, p.message);
+        drawSpeechBubble(p.x + charSize/2, p.y - 10, p.message);
       } else if (p.message && now - p.messageTime >= MESSAGE_DURATION) {
         p.message = '';
       }
     } else {
       // Other players: only show message if player is close
       if (me) {
-        const dx = (p.x + PENGUIN_SIZE/2) - (me.x + PENGUIN_SIZE/2);
-        const dy = (p.y + PENGUIN_SIZE/2) - (me.y + PENGUIN_SIZE/2);
+        const myCharType = me.characterType || 'penguin';
+        const myCharSize = myCharType === 'finn' ? FINN_SIZE : PENGUIN_SIZE;
+        const dx = (p.x + charSize/2) - (me.x + myCharSize/2);
+        const dy = (p.y + charSize/2) - (me.y + myCharSize/2);
         const dist = Math.sqrt(dx*dx + dy*dy);
         
         if (dist < PROXIMITY_DIST && p.message && now - p.messageTime < MESSAGE_DURATION) {
           console.log('Showing message from nearby player:', p.username, 'Message:', p.message, 'Distance:', dist);
-          drawSpeechBubble(p.x + PENGUIN_SIZE/2, p.y - 10, p.message);
+          drawSpeechBubble(p.x + charSize/2, p.y - 10, p.message);
         }
         if (p.message && now - p.messageTime >= MESSAGE_DURATION) {
           p.message = '';
@@ -304,7 +378,7 @@ function draw() {
       } else {
         // If no local player, show all messages (for debug)
         if (p.message && now - p.messageTime < MESSAGE_DURATION) {
-          drawSpeechBubble(p.x + PENGUIN_SIZE/2, p.y - 10, p.message);
+          drawSpeechBubble(p.x + charSize/2, p.y - 10, p.message);
         }
         if (p.message && now - p.messageTime >= MESSAGE_DURATION) {
           p.message = '';
@@ -433,6 +507,7 @@ function showInstanceTitle(instanceId) {
 function initNickname() {
   nicknameInput = document.getElementById('nickname-input');
   setNicknameBtn = document.getElementById('set-nickname-btn');
+  changeCharacterBtn = document.getElementById('change-character-btn');
   
   // Load saved nickname from localStorage
   const savedNickname = localStorage.getItem('pengcity_nickname');
@@ -443,6 +518,12 @@ function initNickname() {
   
   // Set nickname button click handler
   setNicknameBtn.addEventListener('click', setNickname);
+  
+  // Set character change button click handler
+  changeCharacterBtn.addEventListener('click', changeCharacter);
+  
+  // Update button text based on current character
+  changeCharacterBtn.textContent = 'Switch Character';
   
   // Enter key handler for input
   nicknameInput.addEventListener('keypress', (e) => {
@@ -478,6 +559,30 @@ function setNickname() {
     // Redraw to show the nickname immediately
     draw();
   }
+}
+
+function changeCharacter() {
+  // Toggle between penguin and finn
+  myCharacterType = myCharacterType === 'penguin' ? 'finn' : 'penguin';
+  
+  // Update our own player locally
+  const myPlayer = penguins.find(p => p.id === myId);
+  if (myPlayer) {
+    myPlayer.characterType = myCharacterType;
+  }
+  
+  // Notify server about character change
+  if (socket) {
+    socket.emit('updateCharacter', { characterType: myCharacterType });
+  }
+  
+  // Visual feedback
+  changeCharacterBtn.textContent = 'Switch Character';
+  
+  // Redraw to show the character change immediately
+  draw();
+  
+  console.log('Character changed to:', myCharacterType);
 }
 
 function startFade(toInstance) {
@@ -656,7 +761,8 @@ window.addEventListener('keydown', e => {
       walkingLeft: me.walkingLeft,
       walkFrame: me.walkFrame,
       walkTime: me.walkTime,
-      lastDir: me.lastDir
+      lastDir: me.lastDir,
+      characterType: myCharacterType
     };
     console.log('Sending movement:', moveData);
     socket.emit('playerMove', moveData);
@@ -689,7 +795,8 @@ window.addEventListener('keyup', e => {
       walkingLeft: me.walkingLeft,
       walkFrame: me.walkFrame,
       walkTime: me.walkTime,
-      lastDir: me.lastDir
+      lastDir: me.lastDir,
+      characterType: myCharacterType
     });
   }
   
@@ -729,7 +836,8 @@ chatInput.addEventListener('keydown', async e => {
             walkingLeft: me.walkingLeft,
             walkFrame: me.walkFrame,
             walkTime: me.walkTime,
-            lastDir: me.lastDir
+            lastDir: me.lastDir,
+            characterType: myCharacterType
           });
         }
       }
@@ -739,12 +847,14 @@ chatInput.addEventListener('keydown', async e => {
 
 // Walking animation
 function updateWalkAnim() {
-      // Update local player animation
+  // Update local player animation
   const me = penguins.find(p => p.id === myId);
   if (me && (me.walkingRight || me.walkingLeft)) {
     me.walkTime = (me.walkTime || 0) + 1;
     if (me.walkTime % 6 === 0) { // Change frame every 6 ticks (~60ms if setInterval is 100ms)
-      me.walkFrame = ((me.walkFrame || 0) + 1) % WALK_FRAMES;
+      const characterType = me.characterType || 'penguin';
+      const totalFrames = characterType === 'finn' ? FINN_FRAMES : WALK_FRAMES;
+      me.walkFrame = ((me.walkFrame || 0) + 1) % totalFrames;
     }
   } else if (me) {
     me.walkFrame = 0;
@@ -757,7 +867,9 @@ function updateWalkAnim() {
       if (player.walkingRight || player.walkingLeft) {
         player.walkTime = (player.walkTime || 0) + 1;
         if (player.walkTime % 6 === 0) {
-          player.walkFrame = ((player.walkFrame || 0) + 1) % WALK_FRAMES;
+          const characterType = player.characterType || 'penguin';
+          const totalFrames = characterType === 'finn' ? FINN_FRAMES : WALK_FRAMES;
+          player.walkFrame = ((player.walkFrame || 0) + 1) % totalFrames;
           console.log(`Animation of ${player.username}: frame ${player.walkFrame}, walking: ${player.walkingRight ? 'right' : 'left'}`);
         }
       } else {
@@ -778,6 +890,16 @@ penguinWalkImg.onload = () => {
 
 penguinLeftImg.onload = () => {
   console.log('Imagen pengleft.png cargada correctamente');
+  draw();
+};
+
+finnWalkImg.onload = () => {
+  console.log('Imagen finnwalk.png cargada correctamente');
+  draw();
+};
+
+finnLeftImg.onload = () => {
+  console.log('Imagen finnleft.png cargada correctamente');
   draw();
 };
 
@@ -847,7 +969,8 @@ window.addEventListener('DOMContentLoaded', () => {
       walkingLeft: me.walkingLeft,
       walkFrame: me.walkFrame,
       walkTime: me.walkTime,
-      lastDir: me.lastDir
+      lastDir: me.lastDir,
+      characterType: myCharacterType
     });
   }
   if (btnMobileLeft) {

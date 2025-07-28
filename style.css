@@ -13,6 +13,8 @@
   border-radius: 8px;
   border: 2px solid #ff7d00;
   box-shadow: 0 4px 12px rgba(255, 125, 0, 0.3);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 #nickname-input {
@@ -23,7 +25,7 @@
   border-radius: 6px;
   font-family: 'Press Start 2P', monospace;
   font-size: 11px;
-  width: 180px;
+  width: 160px;
   outline: none;
   transition: all 0.3s ease;
 }
@@ -48,6 +50,25 @@
 }
 
 #set-nickname-btn:hover {
+  background: #e66a00;
+  transform: scale(1.05);
+}
+
+#change-character-btn {
+  padding: 10px 14px;
+  background: #ff7d00;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+#change-character-btn:hover {
   background: #e66a00;
   transform: scale(1.05);
 }
