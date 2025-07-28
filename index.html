@@ -2,11 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bonkverse</title>
+  <title>ABSVENTURE TIME</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loader-container">
+      <img src="loader.gif" alt="Loading..." class="loader-gif">
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="loading-text">Loading ABSVENTURE TIME...</div>
+    </div>
+  </div>
+
   <div id="nickname-container">
     <input type="text" id="nickname-input" placeholder="Enter your nickname..." maxlength="15">
     <button id="set-nickname-btn">Set Nickname</button>
@@ -19,10 +30,11 @@
     <button id="btn-music">MUSIC SECTOR</button>
     <button id="btn-dimensional">DIMENSIONAL</button>
     <button id="btn-zone5">FLEX ZONE</button>
-    <div id="sidebar-social">
-      <button id="btn-twitter">Twitter</button>
-      <button id="btn-telegram">Telegram</button>
-    </div>
+  </div>
+  <div id="social-buttons">
+    <button id="btn-twitter">Twitter</button>
+    <button id="btn-telegram">Telegram</button>
+    <button id="btn-buy">Buy</button>
   </div>
   <div id="game-container">
     <canvas id="game-canvas" width="900" height="450"></canvas>

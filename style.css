@@ -1,76 +1,149 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap');
+
+/* Loading Screen */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #FF6B9D 0%, #FF8E53 50%, #FFD93D 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  border: 4px solid #FFD93D;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.loader-gif {
+  width: 120px;
+  height: 120px;
+  border-radius: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.progress-container {
+  width: 300px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  border: 2px solid #FFD93D;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD93D, #FFB347, #FF6B9D);
+  border-radius: 8px;
+  width: 0%;
+  transition: width 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 217, 61, 0.4);
+}
+
+.loading-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
 
 #nickname-container {
   position: fixed;
-  top: 20px;
-  left: calc(50% + 90px);
+  top: 15px;
+  left: calc(50% + 100px);
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 2px solid #ff7d00;
-  box-shadow: 0 4px 12px rgba(255, 125, 0, 0.3);
+  background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+  padding: 14px 20px;
+  border-radius: 15px;
+  border: 3px solid #FFD93D;
+  box-shadow: 0 6px 18px rgba(255, 217, 61, 0.4), 0 3px 8px rgba(0, 0, 0, 0.2);
   flex-wrap: wrap;
   justify-content: center;
+  font-family: 'Fredoka One', cursive;
 }
 
 #nickname-input {
   padding: 10px 14px;
-  border: 2px solid #ff7d00;
-  background: rgba(0, 0, 0, 0.9);
-  color: #ff7d00;
-  border-radius: 6px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
-  width: 160px;
+  border: 2px solid #FFD93D;
+  background: rgba(255, 255, 255, 0.95);
+  color: #4A4A4A;
+  border-radius: 12px;
+  font-family: 'Comic Neue', cursive;
+  font-size: 13px;
+  font-weight: 700;
+  width: 120px;
   outline: none;
   transition: all 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 #nickname-input::placeholder {
-  color: #ff7d00;
-  opacity: 0.7;
+  color: #8B8B8B;
+  opacity: 0.8;
 }
 
 #set-nickname-btn {
   padding: 10px 14px;
-  background: #ff7d00;
-  color: #000;
+  background: linear-gradient(135deg, #FFD93D, #FFB347);
+  color: #4A4A4A;
   border: none;
-  border-radius: 6px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
+  border-radius: 12px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 11px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: bold;
-  min-width: 80px;
+  min-width: 70px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 #set-nickname-btn:hover {
-  background: #e66a00;
+  background: linear-gradient(135deg, #FFB347, #FFD93D);
   transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 #change-character-btn {
   padding: 10px 14px;
-  background: #ff7d00;
-  color: #000;
+  background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+  color: #FFFFFF;
   border: none;
-  border-radius: 6px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
+  border-radius: 12px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 11px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: bold;
-  min-width: 80px;
+  min-width: 70px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 #change-character-btn:hover {
-  background: #e66a00;
+  background: linear-gradient(135deg, #FF8E53, #FF6B9D);
   transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 #sidebar {
@@ -79,91 +152,134 @@
   top: 0;
   height: 100vh;
   width: 180px;
-  background: #222831;
+  background: linear-gradient(180deg, #FF6B9D 0%, #FF8E53 50%, #FFD93D 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 24px;
-  box-shadow: 2px 0 12px #0004;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
   z-index: 10;
+  border-right: 4px solid #FFD93D;
 }
 #sidebar button {
   width: 150px;
   margin: 18px 0;
   padding: 18px 0;
-  font-size: 8px;
-  font-family: 'Press Start 2P', cursive, monospace;
-  border: 3px solid #ff7d00;
-  border-radius: 12px;
-  background: #393e46;
-  color: #ff7d00;
+  font-size: 10px;
+  font-family: 'Fredoka One', cursive;
+  border: 3px solid #FFD93D;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #4A4A4A;
   cursor: pointer;
-  box-shadow: 0 4px 0 #ff7d00, 0 8px 16px #0006;
+  box-shadow: 0 4px 0 #FFD93D, 0 8px 16px rgba(0, 0, 0, 0.2);
   letter-spacing: 1px;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 #sidebar button:hover {
-  background: #ff7d00;
-  color: #222831;
-  border-color: #fff;
-  box-shadow: 0 2px 0 #fff, 0 8px 24px #ff7d0088;
+  background: linear-gradient(135deg, #FFD93D, #FFB347);
+  color: #4A4A4A;
+  border-color: #FF6B9D;
+  box-shadow: 0 2px 0 #FF6B9D, 0 8px 24px rgba(255, 217, 61, 0.4);
+  transform: translateY(-2px);
 }
-#sidebar-social {
-  margin-top: auto;
-  margin-bottom: 40px;
-  width: 100%;
+#social-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: calc(50% + 100px);
+  transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  gap: 15px;
+  z-index: 1000;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+  border-radius: 20px;
+  border: 3px solid #FFD93D;
+  box-shadow: 0 6px 18px rgba(255, 217, 61, 0.4), 0 3px 8px rgba(0, 0, 0, 0.2);
 }
-#sidebar-social button {
+#social-buttons button {
   width: 120px;
-  padding: 8px 0;
+  padding: 12px 0;
   font-size: 9px;
-  font-family: 'Press Start 2P', cursive, monospace;
-  border-radius: 8px;
-  border: none;
+  font-family: 'Fredoka One', cursive;
+  border: 2px solid #FFD93D;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #4A4A4A;
   cursor: pointer;
-  margin: 0;
-  box-shadow: 0 2px 8px #0002;
+  box-shadow: 0 3px 0 #FFD93D, 0 6px 12px rgba(0, 0, 0, 0.2);
   letter-spacing: 1px;
-  margin-bottom: 0;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
 }
+#social-buttons button:hover {
+  background: linear-gradient(135deg, #FFD93D, #FFB347);
+  color: #4A4A4A;
+  border-color: #FF6B9D;
+  box-shadow: 0 2px 0 #FF6B9D, 0 8px 24px rgba(255, 217, 61, 0.4);
+  transform: translateY(-2px);
+}
+
 #btn-twitter {
-  background: #1da1f2;
+  background: linear-gradient(135deg, #1da1f2, #0d8ddb);
   color: #fff;
   border: 2px solid #1a8cd8;
 }
 #btn-twitter:hover {
-  background: #0d8ddb;
+  background: linear-gradient(135deg, #0d8ddb, #1da1f2);
   border-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(29, 161, 242, 0.4);
 }
 #btn-telegram {
-  background: #229ed9;
+  background: linear-gradient(135deg, #229ed9, #178bbd);
   color: #fff;
   border: 2px solid #178bbd;
 }
 #btn-telegram:hover {
-  background: #178bbd;
+  background: linear-gradient(135deg, #178bbd, #229ed9);
   border-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(34, 158, 217, 0.4);
+}
+
+#btn-buy {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: #fff;
+  border: 2px solid #1e7e34;
+}
+#btn-buy:hover {
+  background: linear-gradient(135deg, #20c997, #28a745);
+  border-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
 }
 
 body {
-  background: #cfd8dc;
+  background: linear-gradient(135deg, #FF6B9D 0%, #FF8E53 50%, #FFD93D 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
+  font-family: 'Comic Neue', cursive;
+}
+
+/* Hide main content while loading */
+body.loading {
+  overflow: hidden;
 }
 
 #game-container {
-  box-shadow: 0 4px 32px #0002;
-  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
   overflow: hidden;
   background: #fff;
   margin-left: 200px;
+  border: 4px solid #FFD93D;
 }
 
 #game-canvas {
@@ -173,18 +289,31 @@ body {
 
 #chat-bar {
   width: 860px;
-  background: #f5f5f5;
-  padding: 10px;
+  background: linear-gradient(135deg, #FFD93D, #FFB347);
+  padding: 15px;
   box-sizing: border-box;
+  border-top: 3px solid #FF6B9D;
 }
 
 #chat-input {
   width: 100%;
-  padding: 10px;
+  padding: 12px 16px;
   font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #bbb;
+  border-radius: 15px;
+  border: 3px solid #FF6B9D;
   outline: none;
+  font-family: 'Comic Neue', cursive;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.95);
+  color: #4A4A4A;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+#chat-input:focus {
+  border-color: #FFD93D;
+  box-shadow: 0 6px 12px rgba(255, 217, 61, 0.3);
+  transform: translateY(-2px);
 }
 
 /* Mobile movement controls */
@@ -195,9 +324,9 @@ body {
 @media (max-width: 900px) {
   body {
     overflow: hidden;
-    background: #222831;
+    background: linear-gradient(135deg, #FF6B9D 0%, #FF8E53 50%, #FFD93D 100%);
   }
-  #sidebar, #sidebar-social {
+  #sidebar, #social-buttons {
     display: none !important;
   }
   #game-container {
@@ -210,7 +339,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    background: #222831;
+    background: linear-gradient(135deg, #FF6B9D 0%, #FF8E53 50%, #FFD93D 100%);
+    border: none;
   }
   #game-canvas {
     width: 100vw !important;
@@ -228,7 +358,7 @@ body {
     right: 0;
     width: 100vw;
     justify-content: center;
-    padding: 6px 4vw;
+    padding: 4px 3vw;
     border-radius: 0;
     box-shadow: none;
     z-index: 2001;
@@ -243,15 +373,33 @@ body {
     border-radius: 0;
     box-shadow: none;
     z-index: 2001;
-    background: #f5f5f5;
+    background: linear-gradient(135deg, #FFD93D, #FFB347);
+    border-top: 3px solid #FF6B9D;
   }
   #chat-input {
     font-size: 15px;
-    padding: 8px;
-    border-radius: 6px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    border: 3px solid #FF6B9D;
+    background: rgba(255, 255, 255, 0.95);
   }
   #mobile-controls {
     z-index: 2002;
     bottom: 70px;
+  }
+  
+  /* Show social buttons on mobile but position them differently */
+  #social-buttons {
+    display: flex !important;
+    bottom: 8px;
+    padding: 8px 16px;
+  }
+  
+  #social-buttons button {
+    width: 120px;
+    padding: 12px 0;
+    font-size: 9px;
   }
 } 

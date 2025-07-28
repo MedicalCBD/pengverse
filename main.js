@@ -22,6 +22,18 @@ finnWalkImg.src = 'finnwalk.png';
 const finnLeftImg = new Image();
 finnLeftImg.src = 'finnleft.png';
 
+// Jake character sprites
+const jakeWalkImg = new Image();
+jakeWalkImg.src = 'jakewalk.png';
+const jakeLeftImg = new Image();
+jakeLeftImg.src = 'jakeleft.png';
+
+// Consol character sprites
+const consolWalkImg = new Image();
+consolWalkImg.src = 'consol.png';
+const consolLeftImg = new Image();
+consolLeftImg.src = 'consolleft.png';
+
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -30,9 +42,19 @@ const WALK_FRAME_SIZE = 46.714; // 327px width / 7 frames = 46.714px per frame
 const WALK_FRAMES = 7;
 
 // Finn sprite constants
-const FINN_FRAME_SIZE = 32; // Using 32px for easier calculations
-const FINN_FRAMES = 16;
-const FINN_SIZE = 64;
+const FINN_FRAME_SIZE = 63.857; // 894px width / 14 frames = 63.857px per frame
+const FINN_FRAMES = 14;
+const FINN_SIZE = 100;
+
+// Jake sprite constants
+const JAKE_FRAME_SIZE = 37.875; // 303px width / 8 frames = 37.875px per frame
+const JAKE_FRAMES = 8;
+const JAKE_SIZE = 64;
+
+// Consol sprite constants
+const CONSOL_FRAME_SIZE = 26.25; // 210px width / 8 frames = 26.25px per frame
+const CONSOL_FRAMES = 8;
+const CONSOL_SIZE = 48;
 
 // WebSocket connection
 let socket;
@@ -79,7 +101,8 @@ function initWebSocket() {
     initNickname();
     
     // Randomly assign character type
-    myCharacterType = Math.random() < 0.5 ? 'penguin' : 'finn';
+    const characterTypes = ['penguin', 'finn', 'jake', 'consol'];
+    myCharacterType = characterTypes[Math.floor(Math.random() * characterTypes.length)];
     console.log('Assigned character type:', myCharacterType);
     
     // Unirse al juego
@@ -233,6 +256,14 @@ function drawCharacter(p, isMyPlayer) {
     frameSize = FINN_FRAME_SIZE;
     totalFrames = FINN_FRAMES;
     charSize = FINN_SIZE;
+  } else if (characterType === 'jake') {
+    frameSize = JAKE_FRAME_SIZE;
+    totalFrames = JAKE_FRAMES;
+    charSize = JAKE_SIZE;
+  } else if (characterType === 'consol') {
+    frameSize = CONSOL_FRAME_SIZE;
+    totalFrames = CONSOL_FRAMES;
+    charSize = CONSOL_SIZE;
   } else {
     frameSize = WALK_FRAME_SIZE;
     totalFrames = WALK_FRAMES;
@@ -250,6 +281,30 @@ function drawCharacter(p, isMyPlayer) {
     } else {
       // Idle: show frame 0 facing last direction
       img = (p.lastDir === 'left') ? finnLeftImg : finnWalkImg;
+      frame = 0;
+    }
+  } else if (characterType === 'jake') {
+    if (p.walkingRight) {
+      frame = p.walkFrame % totalFrames;
+      img = jakeWalkImg;
+    } else if (p.walkingLeft) {
+      frame = p.walkFrame % totalFrames;
+      img = jakeLeftImg;
+    } else {
+      // Idle: show frame 0 facing last direction
+      img = (p.lastDir === 'left') ? jakeLeftImg : jakeWalkImg;
+      frame = 0;
+    }
+  } else if (characterType === 'consol') {
+    if (p.walkingRight) {
+      frame = p.walkFrame % totalFrames;
+      img = consolWalkImg;
+    } else if (p.walkingLeft) {
+      frame = p.walkFrame % totalFrames;
+      img = consolLeftImg;
+    } else {
+      // Idle: show frame 0 facing last direction
+      img = (p.lastDir === 'left') ? consolLeftImg : consolWalkImg;
       frame = 0;
     }
   } else {
@@ -277,12 +332,26 @@ function drawCharacter(p, isMyPlayer) {
     const scale = 1 + (Math.random() - 0.5) * 0.5; // random scale
     ctx.scale(scale, scale);
     
-    // Use precise frame calculation for both characters
+    // Use precise frame calculation for all characters
     if (characterType === 'finn') {
-      const actualFrameWidth = 507 / 16; // 31.6875px per frame
+      const actualFrameWidth = 894 / 14; // 63.857px per frame
       ctx.drawImage(
         img,
-        frame * actualFrameWidth, 0, actualFrameWidth, 32,
+        frame * actualFrameWidth, 0, actualFrameWidth, 75,
+        -charSize/2, -charSize/2, charSize, charSize
+      );
+    } else if (characterType === 'jake') {
+      const actualFrameWidth = 303 / 8; // 37.875px per frame
+      ctx.drawImage(
+        img,
+        frame * actualFrameWidth, 0, actualFrameWidth, 61,
+        -charSize/2, -charSize/2, charSize, charSize
+      );
+    } else if (characterType === 'consol') {
+      const actualFrameWidth = 210 / 8; // 26.25px per frame
+      ctx.drawImage(
+        img,
+        frame * actualFrameWidth, 0, actualFrameWidth, 49,
         -charSize/2, -charSize/2, charSize, charSize
       );
     } else {
@@ -296,13 +365,33 @@ function drawCharacter(p, isMyPlayer) {
     }
     ctx.restore();
   } else {
-    // Use precise frame calculation for both characters
+    // Use precise frame calculation for all characters
     if (characterType === 'finn') {
-      const actualFrameWidth = 507 / 16; // 31.6875px per frame
+      const actualFrameWidth = 894 / 14; // 63.857px per frame
+      // Adjust position for larger character to center it properly
+      const offsetX = (PENGUIN_SIZE - charSize) / 2;
+      const offsetY = (PENGUIN_SIZE - charSize) / 2;
       ctx.drawImage(
         img,
-        frame * actualFrameWidth, 0, actualFrameWidth, 32,
+        frame * actualFrameWidth, 0, actualFrameWidth, 75,
+        p.x + offsetX, p.y + offsetY, charSize, charSize
+      );
+    } else if (characterType === 'jake') {
+      const actualFrameWidth = 303 / 8; // 37.875px per frame
+      ctx.drawImage(
+        img,
+        frame * actualFrameWidth, 0, actualFrameWidth, 61,
         p.x, p.y, charSize, charSize
+      );
+    } else if (characterType === 'consol') {
+      const actualFrameWidth = 210 / 8; // 26.25px per frame
+      // Adjust position for smaller character to center it properly
+      const offsetX = (PENGUIN_SIZE - charSize) / 2;
+      const offsetY = (PENGUIN_SIZE - charSize) / 2;
+      ctx.drawImage(
+        img,
+        frame * actualFrameWidth, 0, actualFrameWidth, 49,
+        p.x + offsetX, p.y + offsetY, charSize, charSize
       );
     } else {
       // Penguin character
@@ -332,20 +421,38 @@ function draw() {
     // Draw nickname above character
     if (p.nickname && p.nickname.length > 0) {
       const characterType = p.characterType || 'penguin';
-      const charSize = characterType === 'finn' ? FINN_SIZE : PENGUIN_SIZE;
+      let charSize;
+      if (characterType === 'finn') {
+        charSize = FINN_SIZE;
+      } else if (characterType === 'jake') {
+        charSize = JAKE_SIZE;
+      } else if (characterType === 'consol') {
+        charSize = CONSOL_SIZE;
+      } else {
+        charSize = PENGUIN_SIZE;
+      }
       
       ctx.save();
-      ctx.font = '12px "Press Start 2P", monospace';
-      ctx.fillStyle = '#ff7d00';
-      ctx.strokeStyle = '#000';
-      ctx.lineWidth = 2;
+      ctx.font = 'bold 16px Arial, sans-serif';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 3;
       ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
+      ctx.textBaseline = 'middle';
       
-      const nicknameX = p.x + charSize / 2;
-      const nicknameY = p.y - 5;
+      // Adjust position based on character type for proper centering
+      let nicknameX, nicknameY;
+      if (characterType === 'finn') {
+        // Finn is larger, adjust position to center properly
+        nicknameX = p.x + 50; // Center of 100px character
+        nicknameY = p.y - 15;
+      } else {
+        // Other characters use standard centering
+        nicknameX = p.x + charSize / 2;
+        nicknameY = p.y - 15;
+      }
       
-      // Draw stroke
+      // Draw stroke (outline)
       ctx.strokeText(p.nickname, nicknameX, nicknameY);
       // Draw text
       ctx.fillText(p.nickname, nicknameX, nicknameY);
@@ -354,7 +461,16 @@ function draw() {
     
     // Show message only if it's the player or if close
     const characterType = p.characterType || 'penguin';
-    const charSize = characterType === 'finn' ? FINN_SIZE : PENGUIN_SIZE;
+    let charSize;
+    if (characterType === 'finn') {
+      charSize = FINN_SIZE;
+    } else if (characterType === 'jake') {
+      charSize = JAKE_SIZE;
+    } else if (characterType === 'consol') {
+      charSize = CONSOL_SIZE;
+    } else {
+      charSize = PENGUIN_SIZE;
+    }
     
     if (p.id === myId) {
       if (p.message && now - p.messageTime < MESSAGE_DURATION) {
@@ -366,7 +482,16 @@ function draw() {
       // Other players: only show message if player is close
       if (me) {
         const myCharType = me.characterType || 'penguin';
-        const myCharSize = myCharType === 'finn' ? FINN_SIZE : PENGUIN_SIZE;
+        let myCharSize;
+        if (myCharType === 'finn') {
+          myCharSize = FINN_SIZE;
+        } else if (myCharType === 'jake') {
+          myCharSize = JAKE_SIZE;
+        } else if (myCharType === 'consol') {
+          myCharSize = CONSOL_SIZE;
+        } else {
+          myCharSize = PENGUIN_SIZE;
+        }
         const dx = (p.x + charSize/2) - (me.x + myCharSize/2);
         const dy = (p.y + charSize/2) - (me.y + myCharSize/2);
         const dist = Math.sqrt(dx*dx + dy*dy);
@@ -565,8 +690,16 @@ function setNickname() {
 }
 
 function changeCharacter() {
-  // Toggle between penguin and finn
-  myCharacterType = myCharacterType === 'penguin' ? 'finn' : 'penguin';
+  // Cycle through all characters: penguin -> finn -> jake -> consol -> penguin
+  if (myCharacterType === 'penguin') {
+    myCharacterType = 'finn';
+  } else if (myCharacterType === 'finn') {
+    myCharacterType = 'jake';
+  } else if (myCharacterType === 'jake') {
+    myCharacterType = 'consol';
+  } else {
+    myCharacterType = 'penguin';
+  }
   
   // Update our own player locally
   const myPlayer = penguins.find(p => p.id === myId);
@@ -856,7 +989,16 @@ function updateWalkAnim() {
     me.walkTime = (me.walkTime || 0) + 1;
     if (me.walkTime % 6 === 0) { // Change frame every 6 ticks (~60ms if setInterval is 100ms)
       const characterType = me.characterType || 'penguin';
-      const totalFrames = characterType === 'finn' ? FINN_FRAMES : WALK_FRAMES;
+      let totalFrames;
+      if (characterType === 'finn') {
+        totalFrames = FINN_FRAMES;
+      } else if (characterType === 'jake') {
+        totalFrames = JAKE_FRAMES;
+      } else if (characterType === 'consol') {
+        totalFrames = CONSOL_FRAMES;
+      } else {
+        totalFrames = WALK_FRAMES;
+      }
       me.walkFrame = ((me.walkFrame || 0) + 1) % totalFrames;
     }
   } else if (me) {
@@ -871,7 +1013,16 @@ function updateWalkAnim() {
         player.walkTime = (player.walkTime || 0) + 1;
         if (player.walkTime % 6 === 0) {
           const characterType = player.characterType || 'penguin';
-          const totalFrames = characterType === 'finn' ? FINN_FRAMES : WALK_FRAMES;
+          let totalFrames;
+          if (characterType === 'finn') {
+            totalFrames = FINN_FRAMES;
+          } else if (characterType === 'jake') {
+            totalFrames = JAKE_FRAMES;
+          } else if (characterType === 'consol') {
+            totalFrames = CONSOL_FRAMES;
+          } else {
+            totalFrames = WALK_FRAMES;
+          }
           player.walkFrame = ((player.walkFrame || 0) + 1) % totalFrames;
           console.log(`Animation of ${player.username}: frame ${player.walkFrame}, walking: ${player.walkingRight ? 'right' : 'left'}`);
         }
@@ -903,6 +1054,26 @@ finnWalkImg.onload = () => {
 
 finnLeftImg.onload = () => {
   console.log('Imagen finnleft.png cargada correctamente');
+  draw();
+};
+
+jakeWalkImg.onload = () => {
+  console.log('Imagen jakewalk.png cargada correctamente');
+  draw();
+};
+
+jakeLeftImg.onload = () => {
+  console.log('Imagen jakeleft.png cargada correctamente');
+  draw();
+};
+
+consolWalkImg.onload = () => {
+  console.log('Imagen consol.png cargada correctamente');
+  draw();
+};
+
+consolLeftImg.onload = () => {
+  console.log('Imagen consolleft.png cargada correctamente');
   draw();
 };
 
@@ -940,6 +1111,49 @@ function resizeGameCanvas() {
 window.addEventListener('resize', resizeGameCanvas);
 document.addEventListener('DOMContentLoaded', resizeGameCanvas);
 
+// Loading screen functionality
+let loadingProgress = 0;
+const loadingScreen = document.getElementById('loading-screen');
+const progressBar = document.getElementById('progress-bar');
+
+function updateLoadingProgress(progress) {
+  loadingProgress = progress;
+  if (progressBar) {
+    progressBar.style.width = progress + '%';
+  }
+}
+
+function hideLoadingScreen() {
+  if (loadingScreen) {
+    loadingScreen.style.opacity = '0';
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+      // Remove loading class from body
+      document.body.classList.remove('loading');
+    }, 500);
+  }
+}
+
+function simulateLoading() {
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 15 + 5; // Random increment between 5-20%
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      setTimeout(hideLoadingScreen, 500);
+    }
+    updateLoadingProgress(progress);
+  }, 200);
+}
+
+// Start loading simulation when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  // Add loading class to body
+  document.body.classList.add('loading');
+  simulateLoading();
+});
+
 // Attach event listeners after DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
   const btnMain = document.getElementById('btn-main');
@@ -956,8 +1170,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // Social media buttons
   const btnTwitter = document.getElementById('btn-twitter');
   const btnTelegram = document.getElementById('btn-telegram');
-  if (btnTwitter) btnTwitter.onclick = () => window.open('https://x.com/BonkMetaverse', '_blank');
-  if (btnTelegram) btnTelegram.onclick = () => window.open('https://t.me/BONKMETAVERSE', '_blank');
+  const btnBuy = document.getElementById('btn-buy');
+  if (btnTwitter) btnTwitter.onclick = () => window.open('https://x.com/absventuretime', '_blank');
+  if (btnTelegram) btnTelegram.onclick = () => window.open('https://t.me/AbsventureTime', '_blank');
+  if (btnBuy) btnBuy.onclick = () => window.open('https://dexscreener.com/moonshot/new/abstract', '_blank');
 
   // Mobile movement controls
   const btnMobileLeft = document.getElementById('mobile-left');
