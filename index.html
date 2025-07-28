@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ABSVENTURE TIME</title>
+  <title>ABSVENTURE TIM</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -18,30 +18,123 @@
     </div>
   </div>
 
-  <div id="nickname-container">
-    <input type="text" id="nickname-input" placeholder="Enter your nickname..." maxlength="15">
-    <button id="set-nickname-btn">Set Nickname</button>
-    <button id="change-character-btn">Change Character</button>
+  <div class="dropdown-container">
+    <div class="dropdown">
+      <button id="dropdown-btn" class="dropdown-btn">INSTANCES ▼</button>
+      <div class="dropdown-content">
+        <button id="btn-main">MAIN</button>
+        <button id="btn-shillers">SHILLERS CAMP</button>
+        <button id="btn-music">MUSIC SECTOR</button>
+        <button id="btn-dimensional">DIMENSIONAL</button>
+        <button id="btn-zone5">FLEX ZONE</button>
+      </div>
+    </div>
   </div>
-  
-  <div id="sidebar">
-    <button id="btn-main">MAIN</button>
-    <button id="btn-shillers">SHILLERS CAMP</button>
-    <button id="btn-music">MUSIC SECTOR</button>
-    <button id="btn-dimensional">DIMENSIONAL</button>
-    <button id="btn-zone5">FLEX ZONE</button>
+  <div id="game-container">
+    <div id="nickname-container">
+      <input type="text" id="nickname-input" placeholder="Enter your nickname..." maxlength="15">
+      <button id="set-nickname-btn">Set Nickname</button>
+      <button id="change-character-btn">Change Character</button>
+    </div>
+    <canvas id="game-canvas" width="900" height="450"></canvas>
+    <div id="chat-bar">
+      <input type="text" id="chat-input" placeholder="Type a message and press Enter..." autocomplete="off">
+    </div>
   </div>
   <div id="social-buttons">
     <button id="btn-twitter">Twitter</button>
     <button id="btn-telegram">Telegram</button>
     <button id="btn-buy">Buy</button>
   </div>
-  <div id="game-container">
-    <canvas id="game-canvas" width="900" height="450"></canvas>
-    <div id="chat-bar">
-      <input type="text" id="chat-input" placeholder="Type a message and press Enter..." autocomplete="off">
+  
+  <!-- Roadmap Section -->
+  <section id="roadmap">
+    <div class="roadmap-container">
+      <h2 class="roadmap-title">🚀 ABSVENTURE TIME ROADMAP</h2>
+      
+      <div class="roadmap-grid">
+        <div class="roadmap-item">
+          <div class="roadmap-icon">🎮</div>
+          <h3>Phase 1: Game Launch</h3>
+          <p>Multiplayer social game with Adventure Time theme. Players can explore different instances, chat with each other, and switch between unique characters (Penguin, Finn, Jake, Consol).</p>
+        </div>
+        
+        <div class="roadmap-item">
+          <div class="roadmap-icon">💬</div>
+          <h3>Phase 2: Social Features</h3>
+          <p>Enhanced chat system, friend lists, private messaging, and community features. Players can form groups and create their own adventure parties.</p>
+        </div>
+        
+        <div class="roadmap-item">
+          <div class="roadmap-icon">🎯</div>
+          <h3>Phase 3: Token Launch</h3>
+          <p>Launch of ABSVENTURE TIME token on Abstract Chain through Moonshot. Token will be used for in-game purchases, character customization, and governance.</p>
+        </div>
+        
+        <div class="roadmap-item">
+          <div class="roadmap-icon">🌟</div>
+          <h3>Phase 4: Influencer & Community Growth</h3>
+          <p>When influencers discover this project, they won't be able to resist! Everyone will be talking about ABSVENTURE TIME. Our unique social gaming experience will create viral moments and massive community growth.</p>
+        </div>
+        
+        <div class="roadmap-item">
+          <div class="roadmap-icon">🚀</div>
+          <h3>Phase 5: Future Development</h3>
+          <p>As you can see, we are capable of building this and much more! We have big plans for the future with multiple development phases. This is just the beginning of what we can create together.</p>
+        </div>
+        
+        <div class="roadmap-item">
+          <div class="roadmap-icon">🏙️</div>
+          <h3>Phase 6: City Stickers Campaign</h3>
+          <p>We will create stickers to paste all over the city! Everyone can print them and join the campaign. This way, everyone will know about ABSVENTURE TIME. Let's make our mark on the world!</p>
+        </div>
+      </div>
+      
+      <div class="video-section">
+        <h3>WITNESS THE REVOLUTION</h3>
+        <video controls>
+          <source src="video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>🚀 ABSVENTURE TIME</h3>
+          <p>Join the adventure! Connect with players from around the world in our unique social gaming experience.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>🎮 Game Features</h3>
+          <ul>
+            <li>Multiplayer Social Gaming</li>
+            <li>Multiple Characters</li>
+            <li>Real-time Chat</li>
+            <li>Different Instances</li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>🔗 Connect With Us</h3>
+          <div class="footer-social">
+            <a href="https://x.com/absventuretime" target="_blank">Twitter</a>
+            <a href="https://t.me/AbsventureTime" target="_blank">Telegram</a>
+            <a href="https://dexscreener.com/moonshot/new/abstract" target="_blank">Buy Token</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 ABSVENTURE TIME. All rights reserved. Built with ❤️ for the community.</p>
+      </div>
+    </div>
+  </footer>
+
   <audio id="music-audio" src="musicroom.mp3"></audio>
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script src="https://download.playfab.com/PlayFabClientApi.js"></script>

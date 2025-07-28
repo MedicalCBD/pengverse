@@ -1156,6 +1156,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Attach event listeners after DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
+  // Dropdown functionality
+  const dropdownBtn = document.getElementById('dropdown-btn');
+  const dropdown = document.querySelector('.dropdown');
+  
+  if (dropdownBtn) {
+    dropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle('show');
+    });
+  }
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (dropdown && !dropdown.contains(e.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+  
   const btnMain = document.getElementById('btn-main');
   const btnShillers = document.getElementById('btn-shillers');
   const btnMusic = document.getElementById('btn-music');
